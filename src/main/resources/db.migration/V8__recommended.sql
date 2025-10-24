@@ -1,0 +1,1 @@
+ALTER TABLE aggregate.products ADD COLUMN recommended BOOLEAN DEFAULT FALSE;
