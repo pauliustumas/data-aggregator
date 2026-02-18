@@ -1,1 +1,1 @@
-# opocar-back
+# Data aggregator - main service handling products and categories
