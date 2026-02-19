@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import ai.foodscan.aggregate.db.model.api.NutritionPer100g;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -51,6 +53,12 @@ public class MinimalProduct {
 
     @JsonProperty("sub_sub_category_lt")
     private String subSubCategoryLt;                // Sub-sub-category in Lithuanian
+
+    @JsonProperty("nutrition_per_100g")
+    private NutritionPer100g nutritionPer100g;
+
+    @JsonProperty("net_weight_g")
+    private Integer netWeightG;
 
     // Timestamp Fields
     @JsonProperty("created_at")

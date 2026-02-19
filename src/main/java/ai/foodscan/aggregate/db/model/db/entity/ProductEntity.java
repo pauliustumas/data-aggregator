@@ -148,6 +148,9 @@ public class ProductEntity implements Serializable, Persistable<UUID> {
     @Column("updated_at")
     private LocalDateTime updatedAt;                      // Timestamp when the record was last updated
 
+    @Column("latest_price")
+    private BigDecimal latestPrice;
+
     @Column("recommended")
     @Builder.Default
     private boolean recommended = false;

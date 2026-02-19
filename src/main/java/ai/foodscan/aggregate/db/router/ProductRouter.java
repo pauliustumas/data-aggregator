@@ -1,7 +1,9 @@
 package ai.foodscan.aggregate.db.router;
 
+import ai.foodscan.aggregate.db.handler.ProductFilterHandler;
 import ai.foodscan.aggregate.db.handler.ProductHandler;
 import ai.foodscan.aggregate.db.model.api.Product;
+import ai.foodscan.aggregate.db.model.api.ProductFilterRequest;
 import ai.foodscan.aggregate.db.model.api.ProductsByCategoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -256,10 +258,34 @@ public class ProductRouter {
                                     @ApiResponse(responseCode = "400", description = "Invalid pagination parameters.")
                             }
                     )
+            ),
+            @RouterOperation(
+                    path = "/v1/products/filter",
+                    method = RequestMethod.POST,
+                    beanClass = ProductFilterHandler.class,
+                    beanMethod = "filterProducts",
+                    operation = @Operation(
+                            method = "POST",
+                            operationId = "filterProducts",
+                            tags = {"products"},
+                            description = "Filter products by combining optional criteria: category, allergens, additives, price range, and name. Returns paginated results.",
+                            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                    content = @Content(schema = @Schema(implementation = ProductFilterRequest.class))),
+                            responses = {
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "Filtered products returned successfully.",
+                                            content = @Content(schema = @Schema(implementation = ProductsByCategoryResponse.class))
+                                    ),
+                                    @ApiResponse(responseCode = "400", description = "Invalid filter parameters."),
+                                    @ApiResponse(responseCode = "500", description = "Internal server error.")
+                            }
+                    )
             )
     })
     @Bean
-    public RouterFunction<ServerResponse> productRoutes(ProductHandler productHandler) {
+    public RouterFunction<ServerResponse> productRoutes(ProductHandler productHandler,
+                                                          ProductFilterHandler productFilterHandler) {
         return route(POST("/v1/products/internal/"), productHandler::saveOrUpdateProductByOptionalInternalId)
                 .andRoute(GET("/v1/products/internal/{id}"), productHandler::getProductByInternalId)
                 .andRoute(GET("/v1/products/barcode/{id}"), productHandler::getProductByBarcode)
@@ -268,6 +294,7 @@ public class ProductRouter {
                 .andRoute(POST("/v1/products/barcode-scan"), productHandler::scanBarcodeAndReturnProduct)
                 .andRoute(GET("/v1/products/by-category"), productHandler::getProductsByCategory)
                 .andRoute(GET("/v1/products/top-searched"), productHandler::getTopSearchedProducts)
-                .andRoute(GET("/v1/products/recent-searched"), productHandler::getRecentSearchedProducts);
+                .andRoute(GET("/v1/products/recent-searched"), productHandler::getRecentSearchedProducts)
+                .andRoute(POST("/v1/products/filter"), productFilterHandler::filterProducts);
     }
 }

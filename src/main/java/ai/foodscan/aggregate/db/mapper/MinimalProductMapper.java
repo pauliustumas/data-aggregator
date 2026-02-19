@@ -1,6 +1,7 @@
 package ai.foodscan.aggregate.db.mapper;
 
 import ai.foodscan.aggregate.db.model.api.MinimalProduct;
+import ai.foodscan.aggregate.db.model.api.NutritionPer100g;
 import ai.foodscan.aggregate.db.model.db.entity.ProductEntity;
 
 public class MinimalProductMapper {
@@ -16,7 +17,10 @@ public class MinimalProductMapper {
                 .nameEn(entity.getNameEn())
                 .nameLt(entity.getNameLt())
                 .imageUrl(entity.getImageUrl())
-                .price(entity.getPrice()[entity.getPrice().length - 1])
+                .price(entity.getLatestPrice() != null
+                        ? entity.getLatestPrice()
+                        : (entity.getPrice() != null && entity.getPrice().length > 0
+                                ? entity.getPrice()[entity.getPrice().length - 1] : null))
                 .mainCategoryEn(entity.getMainCategoryEn())
                 .subCategoryEn(entity.getSubCategoryEn())
                 .subSubCategoryEn(entity.getSubSubCategoryEn())
@@ -25,6 +29,13 @@ public class MinimalProductMapper {
                 .subSubCategoryLt(entity.getSubSubCategoryLt())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .build();
+    }
+
+    public static MinimalProduct toEnrichedProduct(ProductEntity entity) {
+        return toProduct(entity).toBuilder()
+                .nutritionPer100g(ProductMapper.deserializeObject(entity.getNutritionPer100g(), NutritionPer100g.class))
+                .netWeightG(entity.getNetWeightG())
                 .build();
     }
 }
