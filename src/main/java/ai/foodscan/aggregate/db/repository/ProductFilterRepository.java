@@ -88,21 +88,25 @@ public class ProductFilterRepository {
             params.put("subSubCategory", filter.getSubSubCategory());
         }
 
-        // Category exclusion — use individual NOT EQUAL conditions joined with AND
+        // Category exclusion — NOT IN via OR, with NULL passthrough
         if (filter.getExcludeCategories() != null && !filter.getExcludeCategories().isEmpty()) {
+            List<String> orParts = new ArrayList<>();
             for (int i = 0; i < filter.getExcludeCategories().size(); i++) {
                 String p = "exCat_" + i;
-                conditions.add("(" + mainCatCol + " IS NULL OR " + mainCatCol + " != :" + p + ")");
+                orParts.add(mainCatCol + " = :" + p);
                 params.put(p, filter.getExcludeCategories().get(i));
             }
+            conditions.add("(" + mainCatCol + " IS NULL OR NOT (" + String.join(" OR ", orParts) + "))");
         }
 
         if (filter.getExcludeSubCategories() != null && !filter.getExcludeSubCategories().isEmpty()) {
+            List<String> orParts = new ArrayList<>();
             for (int i = 0; i < filter.getExcludeSubCategories().size(); i++) {
                 String p = "exSubCat_" + i;
-                conditions.add("(" + subCatCol + " IS NULL OR " + subCatCol + " != :" + p + ")");
+                orParts.add(subCatCol + " = :" + p);
                 params.put(p, filter.getExcludeSubCategories().get(i));
             }
+            conditions.add("(" + subCatCol + " IS NULL OR NOT (" + String.join(" OR ", orParts) + "))");
         }
 
         // Allergens exclusion
