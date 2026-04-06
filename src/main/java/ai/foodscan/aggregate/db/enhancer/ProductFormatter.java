@@ -16,13 +16,13 @@ public class ProductFormatter {
 
     public MinimalProduct format(MinimalProduct product) {
         return product.toBuilder()
-                .imageUrl(imageBasePath + product.getInternalProductId())
+                .imageUrl(imageBasePath + product.getInternalProductId() + ".png")
                 .build();
     }
 
     public Product format(Product product) {
         return product.toBuilder()
-                .imageUrl(imageBasePath + product.getInternalProductId())
+                .imageUrl(imageBasePath + product.getInternalProductId() + ".png")
                 .build();
     }
 }
