@@ -50,8 +50,9 @@ public class ProductFilterService {
                 .page(page)
                 .build();
 
-        log.info("Filtering products: lang={}, page={}, size={}, category={}, name={}, sortBy={}",
-                lang, page, size, validated.getCategory(), validated.getName(), validated.getSortBy());
+        log.info("Filtering products: lang={}, page={}, size={}, category={}, name={}, sortBy={}, excludeCat={}, excludeSubCat={}",
+                lang, page, size, validated.getCategory(), validated.getName(), validated.getSortBy(),
+                validated.getExcludeCategories(), validated.getExcludeSubCategories());
 
         return Mono.zip(
                 productFilterRepository.countFilteredProducts(validated),
