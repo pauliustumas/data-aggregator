@@ -88,15 +88,25 @@ public class ProductFilterRepository {
             params.put("subSubCategory", filter.getSubSubCategory());
         }
 
-        // Category exclusion
+        // Category exclusion — build individual conditions to avoid R2DBC array binding issues
         if (filter.getExcludeCategories() != null && !filter.getExcludeCategories().isEmpty()) {
-            conditions.add("NOT (" + mainCatCol + " = ANY(CAST(:excludeCategories AS text[])))");
-            params.put("excludeCategories", filter.getExcludeCategories().toArray(new String[0]));
+            List<String> catConditions = new ArrayList<>();
+            for (int i = 0; i < filter.getExcludeCategories().size(); i++) {
+                String p = "exCat_" + i;
+                catConditions.add(mainCatCol + " = :" + p);
+                params.put(p, filter.getExcludeCategories().get(i));
+            }
+            conditions.add("NOT (" + String.join(" OR ", catConditions) + ")");
         }
 
         if (filter.getExcludeSubCategories() != null && !filter.getExcludeSubCategories().isEmpty()) {
-            conditions.add("NOT (" + subCatCol + " = ANY(CAST(:excludeSubCategories AS text[])))");
-            params.put("excludeSubCategories", filter.getExcludeSubCategories().toArray(new String[0]));
+            List<String> subConditions = new ArrayList<>();
+            for (int i = 0; i < filter.getExcludeSubCategories().size(); i++) {
+                String p = "exSubCat_" + i;
+                subConditions.add(subCatCol + " = :" + p);
+                params.put(p, filter.getExcludeSubCategories().get(i));
+            }
+            conditions.add("NOT (" + String.join(" OR ", subConditions) + ")");
         }
 
         // Allergens exclusion
