@@ -15,24 +15,14 @@ public class ProductFormatter {
     }
 
     public MinimalProduct format(MinimalProduct product) {
-        String imageUrl = hasOriginalImage(product.getImageUrl())
-                ? product.getImageUrl()
-                : imageBasePath + product.getInternalProductId() + ".png";
         return product.toBuilder()
-                .imageUrl(imageUrl)
+                .imageUrl(imageBasePath + product.getInternalProductId())
                 .build();
     }
 
     public Product format(Product product) {
-        String imageUrl = hasOriginalImage(product.getImageUrl())
-                ? product.getImageUrl()
-                : imageBasePath + product.getInternalProductId() + ".png";
         return product.toBuilder()
-                .imageUrl(imageUrl)
+                .imageUrl(imageBasePath + product.getInternalProductId())
                 .build();
-    }
-
-    private boolean hasOriginalImage(String url) {
-        return url != null && !url.isBlank() && url.startsWith("http") && !url.contains("foodscan.ai");
     }
 }
