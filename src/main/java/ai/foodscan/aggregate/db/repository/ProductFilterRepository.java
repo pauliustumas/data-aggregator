@@ -88,25 +88,25 @@ public class ProductFilterRepository {
             params.put("subSubCategory", filter.getSubSubCategory());
         }
 
-        // Category exclusion — NOT IN via OR, with NULL passthrough
+        // Category exclusion — always use EN columns since exclude values are English slugs
         if (filter.getExcludeCategories() != null && !filter.getExcludeCategories().isEmpty()) {
             List<String> orParts = new ArrayList<>();
             for (int i = 0; i < filter.getExcludeCategories().size(); i++) {
                 String p = "exCat_" + i;
-                orParts.add(mainCatCol + " = :" + p);
+                orParts.add("main_category_en = :" + p);
                 params.put(p, filter.getExcludeCategories().get(i));
             }
-            conditions.add("(" + mainCatCol + " IS NULL OR NOT (" + String.join(" OR ", orParts) + "))");
+            conditions.add("(main_category_en IS NULL OR NOT (" + String.join(" OR ", orParts) + "))");
         }
 
         if (filter.getExcludeSubCategories() != null && !filter.getExcludeSubCategories().isEmpty()) {
             List<String> orParts = new ArrayList<>();
             for (int i = 0; i < filter.getExcludeSubCategories().size(); i++) {
                 String p = "exSubCat_" + i;
-                orParts.add(subCatCol + " = :" + p);
+                orParts.add("sub_category_en = :" + p);
                 params.put(p, filter.getExcludeSubCategories().get(i));
             }
-            conditions.add("(" + subCatCol + " IS NULL OR NOT (" + String.join(" OR ", orParts) + "))");
+            conditions.add("(sub_category_en IS NULL OR NOT (" + String.join(" OR ", orParts) + "))");
         }
 
         // Allergens exclusion
