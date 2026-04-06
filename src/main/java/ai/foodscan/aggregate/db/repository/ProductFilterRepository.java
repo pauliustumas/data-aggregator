@@ -88,25 +88,21 @@ public class ProductFilterRepository {
             params.put("subSubCategory", filter.getSubSubCategory());
         }
 
-        // Category exclusion — build individual conditions to avoid R2DBC array binding issues
+        // Category exclusion — use individual NOT EQUAL conditions joined with AND
         if (filter.getExcludeCategories() != null && !filter.getExcludeCategories().isEmpty()) {
-            List<String> catConditions = new ArrayList<>();
             for (int i = 0; i < filter.getExcludeCategories().size(); i++) {
                 String p = "exCat_" + i;
-                catConditions.add("COALESCE(" + mainCatCol + ",'') = :" + p);
+                conditions.add("(" + mainCatCol + " IS NULL OR " + mainCatCol + " != :" + p + ")");
                 params.put(p, filter.getExcludeCategories().get(i));
             }
-            conditions.add("NOT (" + String.join(" OR ", catConditions) + ")");
         }
 
         if (filter.getExcludeSubCategories() != null && !filter.getExcludeSubCategories().isEmpty()) {
-            List<String> subConditions = new ArrayList<>();
             for (int i = 0; i < filter.getExcludeSubCategories().size(); i++) {
                 String p = "exSubCat_" + i;
-                subConditions.add("COALESCE(" + subCatCol + ",'') = :" + p);
+                conditions.add("(" + subCatCol + " IS NULL OR " + subCatCol + " != :" + p + ")");
                 params.put(p, filter.getExcludeSubCategories().get(i));
             }
-            conditions.add("NOT (" + String.join(" OR ", subConditions) + ")");
         }
 
         // Allergens exclusion
