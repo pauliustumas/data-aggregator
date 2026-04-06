@@ -22,6 +22,10 @@ public class NutritionCalculator {
     public NutritionComparison calculateNutritionComparison(NutritionPer100g productNutrition, NutritionPer100g avgNutrition) {
         NutritionComparison comparison = new NutritionComparison();
 
+        if (productNutrition == null) {
+            productNutrition = new NutritionPer100g();
+        }
+
         // Set average values from avgNutrition into the comparison.
         comparison.setAvgFats(avgNutrition.getFats());
         comparison.setAvgSaturatedFats(avgNutrition.getSaturatedFats());

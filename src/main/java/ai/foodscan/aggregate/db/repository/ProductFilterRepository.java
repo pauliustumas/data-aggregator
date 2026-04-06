@@ -88,6 +88,17 @@ public class ProductFilterRepository {
             params.put("subSubCategory", filter.getSubSubCategory());
         }
 
+        // Category exclusion
+        if (filter.getExcludeCategories() != null && !filter.getExcludeCategories().isEmpty()) {
+            conditions.add("NOT (" + mainCatCol + " = ANY(CAST(:excludeCategories AS text[])))");
+            params.put("excludeCategories", filter.getExcludeCategories().toArray(new String[0]));
+        }
+
+        if (filter.getExcludeSubCategories() != null && !filter.getExcludeSubCategories().isEmpty()) {
+            conditions.add("NOT (" + subCatCol + " = ANY(CAST(:excludeSubCategories AS text[])))");
+            params.put("excludeSubCategories", filter.getExcludeSubCategories().toArray(new String[0]));
+        }
+
         // Allergens exclusion
         if (filter.getExcludeAllergens() != null && !filter.getExcludeAllergens().isEmpty()) {
             String col = isLt ? "allergens_lt" : "allergens_en";

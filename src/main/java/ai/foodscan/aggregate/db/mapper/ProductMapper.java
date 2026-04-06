@@ -28,8 +28,8 @@ public class ProductMapper {
                 .nameLt(entity.getNameLt())
                 .rawDescription(entity.getRawDescription())
                 .imageUrl(entity.getImageUrl())
-                .price(entity.getPrice()[entity.getPrice().length - 1])
-                .originalPrice(entity.getOriginalPrice()[entity.getOriginalPrice().length - 1])
+                .price(entity.getPrice() != null && entity.getPrice().length > 0 ? entity.getPrice()[entity.getPrice().length - 1] : null)
+                .originalPrice(entity.getOriginalPrice() != null && entity.getOriginalPrice().length > 0 ? entity.getOriginalPrice()[entity.getOriginalPrice().length - 1] : null)
                 .descriptionEn(entity.getDescriptionEn())
                 .descriptionLt(entity.getDescriptionLt())
                 .countryOfOriginLt(entity.getCountryOfOriginLt())
@@ -77,8 +77,8 @@ public class ProductMapper {
                 .nameLt(product.getNameLt())
                 .rawDescription(product.getRawDescription())
                 .imageUrl(product.getImageUrl())
-                .price(new BigDecimal[] {product.getPrice()})
-                .originalPrice(new BigDecimal[] {product.getOriginalPrice()})
+                .price(product.getPrice() != null ? new BigDecimal[] {product.getPrice()} : null)
+                .originalPrice(product.getOriginalPrice() != null ? new BigDecimal[] {product.getOriginalPrice()} : null)
                 .descriptionEn(product.getDescriptionEn())
                 .descriptionLt(product.getDescriptionLt())
                 .countryOfOriginLt(product.getCountryOfOriginLt())
@@ -111,7 +111,7 @@ public class ProductMapper {
                 .aiDatasource(product.getAiDatasource())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
-                .recommended(product.getRecommended())
+                .recommended(product.getRecommended() != null ? product.getRecommended() : false)
                 .build();
     }
 

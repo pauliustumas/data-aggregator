@@ -51,6 +51,12 @@ public class ProductFilterRequest {
     @JsonProperty("sub_sub_categories")
     private List<String> subSubCategories;
 
+    @JsonProperty("exclude_categories")
+    private List<String> excludeCategories;
+
+    @JsonProperty("exclude_sub_categories")
+    private List<String> excludeSubCategories;
+
     @JsonProperty("sort_by")
     private String sortBy;
 
