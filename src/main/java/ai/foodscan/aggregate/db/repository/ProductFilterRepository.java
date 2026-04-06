@@ -93,7 +93,7 @@ public class ProductFilterRepository {
             List<String> catConditions = new ArrayList<>();
             for (int i = 0; i < filter.getExcludeCategories().size(); i++) {
                 String p = "exCat_" + i;
-                catConditions.add(mainCatCol + " = :" + p);
+                catConditions.add("COALESCE(" + mainCatCol + ",'') = :" + p);
                 params.put(p, filter.getExcludeCategories().get(i));
             }
             conditions.add("NOT (" + String.join(" OR ", catConditions) + ")");
@@ -103,7 +103,7 @@ public class ProductFilterRepository {
             List<String> subConditions = new ArrayList<>();
             for (int i = 0; i < filter.getExcludeSubCategories().size(); i++) {
                 String p = "exSubCat_" + i;
-                subConditions.add(subCatCol + " = :" + p);
+                subConditions.add("COALESCE(" + subCatCol + ",'') = :" + p);
                 params.put(p, filter.getExcludeSubCategories().get(i));
             }
             conditions.add("NOT (" + String.join(" OR ", subConditions) + ")");
