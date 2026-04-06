@@ -109,6 +109,11 @@ public class ProductFilterRepository {
             conditions.add("(sub_category_en IS NULL OR NOT (" + String.join(" OR ", orParts) + "))");
         }
 
+        // Require image
+        if (filter.isRequireImage()) {
+            conditions.add("image_url IS NOT NULL AND image_url != ''");
+        }
+
         // Allergens exclusion
         if (filter.getExcludeAllergens() != null && !filter.getExcludeAllergens().isEmpty()) {
             String col = isLt ? "allergens_lt" : "allergens_en";

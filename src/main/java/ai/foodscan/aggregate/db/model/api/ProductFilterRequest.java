@@ -57,6 +57,10 @@ public class ProductFilterRequest {
     @JsonProperty("exclude_sub_categories")
     private List<String> excludeSubCategories;
 
+    @JsonProperty("require_image")
+    @Builder.Default
+    private boolean requireImage = false;
+
     @JsonProperty("sort_by")
     private String sortBy;
 
