@@ -65,11 +65,20 @@ public class EuAdditiveEntity implements Serializable, Persistable<Long> {
     @Column("source_url")
     private String sourceUrl;
 
+    @Column("opinion_en")
+    private String opinionEn;
+
+    @Column("opinion_lt")
+    private String opinionLt;
+
     @Column("scraped_at")
     private LocalDateTime scrapedAt;
 
     @Column("translated_at")
     private LocalDateTime translatedAt;
+
+    @Column("opinion_generated_at")
+    private LocalDateTime opinionGeneratedAt;
 
     @Column("created_at")
     private LocalDateTime createdAt;

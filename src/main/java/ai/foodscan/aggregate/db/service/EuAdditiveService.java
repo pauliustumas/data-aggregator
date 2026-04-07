@@ -113,6 +113,8 @@ public class EuAdditiveService {
                 .memberOfGroup(e.getMemberOfGroup())
                 .policyItemCode(e.getPolicyItemCode())
                 .sourceUrl(e.getSourceUrl())
+                .opinionEn(e.getOpinionEn())
+                .opinionLt(e.getOpinionLt())
                 .restrictions(restrictions)
                 .legislations(legislations)
                 .build();

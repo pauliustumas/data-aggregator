@@ -56,6 +56,12 @@ public class EuAdditive {
     @JsonProperty("source_url")
     private String sourceUrl;
 
+    @JsonProperty("opinion_en")
+    private String opinionEn;
+
+    @JsonProperty("opinion_lt")
+    private String opinionLt;
+
     @JsonProperty("restrictions")
     private List<EuAdditiveRestriction> restrictions;
 
